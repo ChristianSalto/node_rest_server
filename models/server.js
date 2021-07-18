@@ -5,48 +5,50 @@ const { dbConnection } = require('../database/config');
 
 class Server {
 
-  constructor() {
-    this.app = express();
-    this.userPath = '/api/users';
+	constructor() {
+		this.app = express();
+		this.userPath = '/api/users';
+		this.authPath = '/api/auth';
 
-    // Conectar a la base de datos
-    this.connectionDB();
+		// Conectar a la base de datos
+		this.connectionDB();
 
-    // Middlewares
-    this.middlewares();
+		// Middlewares
+		this.middlewares();
 
-    // Rutas de mi aplicacion 
-    this.routes();
+		// Rutas de mi aplicacion 
+		this.routes();
 
-  }
+	}
 
-  async connectionDB() {
-    await dbConnection();
-  }
+	async connectionDB() {
+		await dbConnection();
+	}
 
-  middlewares() {
+	middlewares() {
 
-    // CORS
-    this.app.use(cors());
+		// CORS
+		this.app.use(cors());
 
-    // Lectura y parseo del body
-    this.app.use(express.json())
+		// Lectura y parseo del body
+		this.app.use(express.json());
 
-    // Directorio publico
-    this.app.use(express.static('public'));
-  }
+		// Directorio publico
+		this.app.use(express.static('public'));
+	}
 
-  routes() {
+	routes() {
 
-    this.app.use(this.userPath, require('../routes/users'))
+		this.app.use(this.authPath, require('../routes/auth'));
+		this.app.use(this.userPath, require('../routes/users'));
 
-  }
+	}
 
-  listen() {
-    this.app.listen(process.env.PORT, () => {
-      console.log(`server running port ${process.env.PORT}`);
-    });
-  }
+	listen() {
+		this.app.listen(process.env.PORT, () => {
+			console.log(`server running port ${process.env.PORT}`);
+		});
+	}
 
 }
 

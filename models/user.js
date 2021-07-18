@@ -40,7 +40,8 @@ const UserSchema = Schema({
 // como la password y la __v, usamos "function" en vez de "arrow" por que necesitamos el objeto this
 
 UserSchema.methods.toJSON = function () {
-  const { __v, password, ...user } = this.toObject();
+  const { __v, password, _id, ...user } = this.toObject();
+  user.uid = _id;
   return user
 }
 
